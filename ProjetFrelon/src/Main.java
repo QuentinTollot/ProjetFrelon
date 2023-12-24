@@ -1,54 +1,36 @@
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
+import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
-public class test {
-	public static void main(String[] args) {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+import javax.swing.*;
+import java.awt.*;
 
-		// Charger la première image de test
-		// String imagePath = "ProjetFrelon/data/Trap/hornet01.jpg";
-		String imagePath = "ProjetFrelon/data/Trap/hornet01.jpg";
+public class Main {
 
-		Mat image = Imgcodecs.imread(imagePath);
+    public static void main(String[] args) {
+    	
+    	 System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-		/***************************************
-		 * Partie Pré-traitement *
-		 ***************************************/
+         // Creation du panel
+         JPanel imagePanel = new JPanel();
+         imagePanel.setLayout(new FlowLayout());
 
-		// Creating an empty matrices to store edges, source, destination
-		Mat contraste = new Mat(image.rows(), image.cols(), image.type());
-		Mat gray = new Mat(image.rows(), image.cols(), image.type());
-		Mat blur = new Mat(image.rows(), image.cols(), image.type());
+         // Loop through 11 images
+         for (int i = 1; i <= 11; i++) {
+             // Charger l'image
+             String imagePath = "C:\\Users\\Quentin\\git\\ProjetFrelon\\ProjetFrelon\\data\\Trap\\test" + i + ".jpg";
+             Mat originalImage = Imgcodecs.imread(imagePath);
 
-		// Converting the image to Gray
-		Imgproc.cvtColor(image, gray, Imgproc.COLOR_RGB2GRAY);
-		Imgcodecs.imwrite("ProjetFrelon/data/Results/gray.jpg", gray);
+             // réduit l'image de 10%
+             int cropPercentage = 10;
+             int cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
 
-		// Améliorer le contraste
-		Imgproc.equalizeHist(gray, contraste);
-		Imgcodecs.imwrite("ProjetFrelon/data/Results/equalize.jpg", contraste);
-
-		// Blurring the image
-		Imgproc.medianBlur(contraste, blur, 13);
-		// Imgproc.blur(gray, edges, new Size(3, 3));
-		Imgcodecs.imwrite("ProjetFrelon/data/Results/blur.jpg", blur);
-		
-
-		/***************************************
-		 * Partie Edge Detection *
-		 ***************************************/
-
-		Mat dst = new Mat(image.rows(), image.cols(), image.type(), new Scalar(0));
-
-		// Detecting the edges
-		Imgproc.Canny(blur, dst, 100, 300);
-
-		// Créer l'image modifiée
-		Imgcodecs.imwrite("ProjetFrelon/data/Results/detected_wings.jpg", dst);
-
-	}
+             Rect cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
+             Mat image = new Mat(originalImage, cropRect);
+             
+             TraitementImage.traitementimage(image, originalImage, imagePanel);
+         }
+    }   
 }

@@ -5,7 +5,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCV"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OPEN CV"/>
 	<classpathentry kind="src" path="ProjetFrelon/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
