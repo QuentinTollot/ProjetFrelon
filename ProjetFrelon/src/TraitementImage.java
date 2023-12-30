@@ -16,7 +16,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class TraitementImage {
 
-    static void traitementimage(Mat image, Mat originalImage, JPanel imagePanel) {
+    public static double traitementimage(Mat image, Mat originalImage, JPanel imagePanel) {
         // Convertir l'image en espace colorimétrique HSV
         Mat hsvImage = new Mat();
         Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
@@ -68,7 +68,7 @@ public class TraitementImage {
         // Vérifier si la longueur du rectangle dépasse 1500 pixels
         double longueurRectangle = bigRect.width;
 
-        if (longueurRectangle > 1500) {
+        if (longueurRectangle > 2500) {
             // réduit l'image de 10%
             int cropPercentage = 20;
             int cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
@@ -76,7 +76,7 @@ public class TraitementImage {
             Rect cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
             image = new Mat(originalImage, cropRect);
 
-            traitementimage(image, originalImage, imagePanel);
+            return traitementimage(image, originalImage, imagePanel);
         } else {
             // Dessiner le grand rectangle sans zoom
             Imgproc.rectangle(resultImage, new org.opencv.core.Point(bigRect.x, bigRect.y),
@@ -87,7 +87,7 @@ public class TraitementImage {
             System.out.println("Longueur du frelon en pixels : " + longueurRectangle);
 
             //traduire les pixel en mm pour l'échelle
-            double longueur_reelle = longueurRectangle/1;
+            double longueur_reelle = longueurRectangle / 1;
 
             //estimation de la caste
             String estimationTaille = FrelonDetecteur.estimerCasteFrelon(longueurRectangle);
@@ -101,6 +101,7 @@ public class TraitementImage {
             // Afficher l'image résultante
             ImagePrinter.displayImage(matToBufferedImage(resultImage));
         }
+        return bigRect.width;
     }
 
     // Méthode pour convertir un objet Mat en BufferedImage
