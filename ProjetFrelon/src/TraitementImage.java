@@ -16,70 +16,67 @@ import org.opencv.imgproc.Imgproc;
 
 public class TraitementImage {
 
-	static void traitementimage(Mat image, Mat originalImage, JPanel imagePanel) { {
-        // Convertir l'image en niveaux de gris
-        Mat grayImage = new Mat();
-        Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
+    static void traitementimage(Mat image, Mat originalImage, JPanel imagePanel) {
+        // Convertir l'image en espace colorimétrique HSV
+        Mat hsvImage = new Mat();
+        Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
 
-        // Appliquer un filtre pour améliorer la détection des contours
-        Imgproc.GaussianBlur(grayImage, grayImage, new Size(5, 5), 0);
+        // Définir les plages de couleur pour le jaune et le noir
+        Scalar yellowLowerBound = new Scalar(20, 100, 100);
+        Scalar yellowUpperBound = new Scalar(30, 255, 255);
+        Scalar blackLowerBound = new Scalar(0, 0, 0);
+        Scalar blackUpperBound = new Scalar(180, 255, 30);
 
-        // Appliquer la détection des contours
+        // Créer des masques pour le jaune et le noir
+        Mat yellowMask = new Mat();
+        Mat blackMask = new Mat();
+        Core.inRange(hsvImage, yellowLowerBound, yellowUpperBound, yellowMask);
+        Core.inRange(hsvImage, blackLowerBound, blackUpperBound, blackMask);
+
+        // Fusionner les masques (si nécessaire)
+        Mat colorMask = new Mat();
+        Core.bitwise_or(yellowMask, blackMask, colorMask);
+
+        // Appliquer le masque fusionné à l'image originale pour obtenir les régions d'intérêt
+        Mat roiImage = new Mat();
+        image.copyTo(roiImage, colorMask);
+
+        // Appliquer la détection des contours sur l'image avec les régions d'intérêt
         Mat edges = new Mat();
-        Imgproc.Canny(grayImage, edges, 50, 150);
+        Imgproc.Canny(roiImage, edges, 50, 150);
 
         // Recherche des contours dans l'image
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
         Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-
-        // Filtrer les contours pour trouver ceux qui pourraient représenter un insecte jaune/noir
-        List<MatOfPoint> filteredContours = new ArrayList<>();
-        int minRectangleArea = 13; // Longueur minimum du rectangle
-
-        for (MatOfPoint contour : contours) {
-            MatOfPoint2f approxCurve = new MatOfPoint2f();
-            MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
-            double approxDistance = Imgproc.arcLength(contour2f, true) * 0.02;
-            Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
-
-            int sides = (int) approxCurve.total();
-            if (sides >= 3 && sides <= 6) { // Autorise les contours entre 3 et 6
-                double contourArea = Imgproc.contourArea(contour);
-                if (contourArea >= minRectangleArea) {
-                    filteredContours.add(contour);
-                }
-            }
-        }
-
         // Dessiner les contours filtrés sur l'image originale
         Mat resultImage = image.clone();
-        Imgproc.drawContours(resultImage, filteredContours, -1, new Scalar(0, 255, 0), 2);
+        Imgproc.drawContours(resultImage, contours, -1, new Scalar(0, 255, 0), 2);
 
         // Dessiner les rectangles
-        for (MatOfPoint contour : filteredContours) {
+        for (MatOfPoint contour : contours) {
             Rect rect = Imgproc.boundingRect(contour);
-            Imgproc.rectangle(resultImage, new org.opencv.core.Point(rect.x, rect.y), new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255, 0, 0), 2);
+            Imgproc.rectangle(resultImage, new org.opencv.core.Point(rect.x, rect.y),
+                    new org.opencv.core.Point(rect.x + rect.width, rect.y + rect.height),
+                    new Scalar(255, 0, 0), 2);
         }
-        
+
         // Trouver les coordonnées du rectangle englobant
-        Rect bigRect = LengthProcess.boundingRectOfAllContours(filteredContours);
+        Rect bigRect = LengthProcess.boundingRectOfAllContours(contours);
 
         // Vérifier si la longueur du rectangle dépasse 1500 pixels
         double longueurRectangle = bigRect.width;
-        
+
         if (longueurRectangle > 1500) {
-             // réduit l'image de 10%
-             int cropPercentage = 20;
-             int cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
+            // réduit l'image de 10%
+            int cropPercentage = 20;
+            int cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
 
-             Rect cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
-             image = new Mat(originalImage, cropRect);
-             
-             traitementimage(image, originalImage, imagePanel);
+            Rect cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
+            image = new Mat(originalImage, cropRect);
 
-
+            traitementimage(image, originalImage, imagePanel);
         } else {
             // Dessiner le grand rectangle sans zoom
             Imgproc.rectangle(resultImage, new org.opencv.core.Point(bigRect.x, bigRect.y),
@@ -89,10 +86,9 @@ public class TraitementImage {
             // Afficher la longueur du frelon en pixels
             System.out.println("Longueur du frelon en pixels : " + longueurRectangle);
 
-
             //traduire les pixel en mm pour l'échelle
             double longueur_reelle = longueurRectangle/1;
-            
+
             //estimation de la caste
             String estimationTaille = FrelonDetecteur.estimerCasteFrelon(longueurRectangle);
             System.out.println("Estimation de la taille du frelon : " + estimationTaille);
@@ -104,10 +100,10 @@ public class TraitementImage {
 
             // Afficher l'image résultante
             ImagePrinter.displayImage(matToBufferedImage(resultImage));
-	        }
-	    }
-	}
-	// Méthode pour convertir un objet Mat en BufferedImage
+        }
+    }
+
+    // Méthode pour convertir un objet Mat en BufferedImage
     public static BufferedImage matToBufferedImage(Mat mat) {
         int dataSize = mat.cols() * mat.rows() * (int)mat.elemSize();
         byte[] data = new byte[dataSize];
