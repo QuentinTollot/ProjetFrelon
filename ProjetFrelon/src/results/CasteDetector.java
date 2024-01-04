@@ -1,7 +1,10 @@
+package results;
+
+
 import java.util.Calendar;
 
-public class FrelonDetecteur {
-	static String estimerCasteFrelon(double longueur_reelle) {
+public class CasteDetector {
+	public static String estimerCasteFrelon(double longueur_reelle) {
     	// Obtenir le mois actuel
         int moisActuel = Calendar.getInstance().get(Calendar.MONTH) + 1; 
         
@@ -20,35 +23,35 @@ public class FrelonDetecteur {
         // Printemps
     	if (saison.equalsIgnoreCase("printemps")) {
             if (longueur_reelle >= 25 && longueur_reelle <= 35) {
-                return "Frelon asiatique reine au printemps";
+                return "Reine";
             } else if (longueur_reelle >= 14 && longueur_reelle <= 18) {
-                return "Frelon asiatique ouvrière au printemps";
+                return "Ouvrière";
             }
         }
         // Été
         else if (saison.equalsIgnoreCase("été")) {
             if (longueur_reelle >= 35 && longueur_reelle <= 40) {
-                return "Frelon asiatique reine en été";
+                return "Reine";
             } else if (longueur_reelle >= 25 && longueur_reelle <= 33) {
-                return "Frelon asiatique ouvrière en été";
+                return "Ouvrière";
             }
         }
     	// Automne
         else if (saison.equalsIgnoreCase("automne")) {
         	if (longueur_reelle >=25 && longueur_reelle <= 33) {
-        		return "Frelon asiatique ouvrière en automne";
+        		return "Ouvrière";
         	}
         	else if (longueur_reelle > 33 && longueur_reelle <43) {
-        		return "Frelon asiatique reine en automne";
+        		return "Reine";
         	}
         }
     	// Hiver
         else {
         	if (longueur_reelle >=25 && longueur_reelle <= 40) {
-        		return "Frelon asiatique reine en hiver";
+        		return "Reine";
         	}
         }
-        return "Taille inconnue";
+        return "Non déterminée";
     }
 
 }

@@ -1,22 +1,18 @@
+package imageProcessing;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class TraitementImage {
 
-    public static double traitementimage(Mat image, Mat originalImage, JPanel imagePanel) {
+    public static double traitementimage(Mat image, Mat originalImage) {
         // Convertir l'image en espace colorimétrique HSV
         Mat hsvImage = new Mat();
         Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
@@ -76,8 +72,10 @@ public class TraitementImage {
             Rect cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
             image = new Mat(originalImage, cropRect);
 
-            return traitementimage(image, originalImage, imagePanel);
+            return traitementimage(image, originalImage);
         } else {
+        	return longueurRectangle;
+        	/*
             // Dessiner le grand rectangle sans zoom
             Imgproc.rectangle(resultImage, new org.opencv.core.Point(bigRect.x, bigRect.y),
                     new org.opencv.core.Point(bigRect.x + bigRect.width, bigRect.y + bigRect.height),
@@ -86,11 +84,8 @@ public class TraitementImage {
             // Afficher la longueur du frelon en pixels
             System.out.println("Longueur du frelon en pixels : " + longueurRectangle);
 
-            //traduire les pixel en mm pour l'échelle
-            double longueur_reelle = longueurRectangle / 1;
-
             //estimation de la caste
-            String estimationTaille = FrelonDetecteur.estimerCasteFrelon(longueurRectangle);
+            String estimationTaille = results.CasteDetector.estimerCasteFrelon(longueurRectangle);
             System.out.println("Estimation de la taille du frelon : " + estimationTaille);
 
             // Redimensionner l'image
@@ -100,11 +95,15 @@ public class TraitementImage {
 
             // Afficher l'image résultante
             ImagePrinter.displayImage(matToBufferedImage(resultImage));
+            */
         }
-        return bigRect.width;
     }
 
-    // Méthode pour convertir un objet Mat en BufferedImage
+    /**
+     * Méthode pour convertir un objet Mat en BufferedImage
+     * @param mat : la matrice de l'image en format "Mat"
+     * @return l'image en format "BufferedImage"
+     */
     public static BufferedImage matToBufferedImage(Mat mat) {
         int dataSize = mat.cols() * mat.rows() * (int)mat.elemSize();
         byte[] data = new byte[dataSize];

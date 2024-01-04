@@ -1,9 +1,12 @@
+package tests;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
+
+import imageProcessing.TraitementImage;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +20,7 @@ public class TestFrelons {
         // Loop through 11 images
         for (int i = 1; i <= 11; i++) {
             // Charger l'image
-            String imagePath = "C:\\Users\\Quentin\\IdeaProjects\\ProjetFrelon\\ProjetFrelon\\data\\Trap\\test" + i + ".jpg";
+            String imagePath = "ProjetFrelon\\data\\Trap\\test" + i + ".jpg";
             Mat originalImage = Imgcodecs.imread(imagePath);
 
             // réduit l'image de 5%
@@ -27,7 +30,7 @@ public class TestFrelons {
             Rect cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
             Mat image = new Mat(originalImage, cropRect);
 
-            double longueurRectangle = TraitementImage.traitementimage(image, originalImage, null);
+            double longueurRectangle = TraitementImage.traitementimage(image, originalImage);
 
             System.out.println("Longueur du rectangle pour l'image " + i + ": " + longueurRectangle);
 
