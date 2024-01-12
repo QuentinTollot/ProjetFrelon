@@ -13,7 +13,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class TraitementImage {
 
-    public static Rect traitementimage(Mat image, Mat originalImage) {
+    public static Rect traitementimage(Mat image) {
 
         // Convertir l'image en espace colorimétrique HSV
         Mat hsvImage = new Mat();
