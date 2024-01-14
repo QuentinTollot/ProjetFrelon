@@ -1,12 +1,9 @@
 package results;
 
 /**
- * Used to get the real lenght of the hornet
+ * Cette classe permet de convertir les pixels en mm
  */
 public class RealLenght {
-	/**
-	 * the number of pixel in the picture per millimeter
-	 */
 	private int pixelPerMm;
 	public RealLenght(int pixelPerMmParam) {
 		pixelPerMm = pixelPerMmParam;

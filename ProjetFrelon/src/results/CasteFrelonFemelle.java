@@ -4,11 +4,13 @@ import imageProcessing.TraitementImage;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
-import results.CasteDetector;
-import results.RealLenght;
 
 import static imageProcessing.TraitementImage.traitementimage;
 
+/**
+ * Cette classe gère tous le rassemblement des différentes fonctions et
+ * des paramètres afin de terminer la caste
+ */
 public class CasteFrelonFemelle {
     public String CasteFrelonFemelle(String CheminImage, int Scale, boolean rotation) {
         //On charge l'image

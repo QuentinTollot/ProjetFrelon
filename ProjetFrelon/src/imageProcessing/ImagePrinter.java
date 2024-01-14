@@ -7,6 +7,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+/**
+ * cette classe permet d'afficher facilement une image à l'aide de swing
+ */
 public class ImagePrinter {
 	// Méthode pour afficher une image dans une fenêtre Swing
     static void displayImage(Image img) {

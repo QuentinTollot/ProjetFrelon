@@ -10,6 +10,12 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Cette classe gère le traitement de l'image du frelon.
+ * Elle applique sur l'image :
+ * _des masques de couleur
+ * _de la détection de contours
+ */
 
 public class TraitementImage {
 

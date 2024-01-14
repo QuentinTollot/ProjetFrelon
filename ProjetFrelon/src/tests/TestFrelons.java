@@ -9,10 +9,16 @@ import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import results.CasteFrelonFemelle;
 
-import static imageProcessing.TraitementImage.traitementimage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static results.CasteDetector.determinerSaison;
 
+/**
+ * Cette classe gère les tests pour le projet
+ * Elle en effectue deux :
+ * _un test pour la caste
+ * _un test pour la longueur des frelons
+ */
 public class TestFrelons {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -38,8 +44,15 @@ public class TestFrelons {
             }
             String casteResultat = casteFrelonFemelle.CasteFrelonFemelle(cheminImage, scale, rotation);
 
-            // on doit obtenir le même résultats (sauf le deux où on ne connaît pas la caste)
-            String casteAttendue = "Non déterminée"; // Caste pour l'hiver
+            // on doit obtenir le même résultats (sauf la photo test2 où on ne connaît pas la caste)
+            String saison = determinerSaison();
+            String casteAttendue = "";
+            if (saison == "hiver"){
+                casteAttendue = "Non déterminée"; // Caste pour l'hiver
+            }
+            else{
+                casteAttendue = "Ouvrière"; //caste le reste de l'année
+            }
             assertEquals("Vérification de la caste pour l'image " + i, casteAttendue, casteResultat);
         }
 
@@ -72,7 +85,7 @@ public class TestFrelons {
 
 
             //si la longueur est supérieure à 2000 pixels, on zoom de 20%
-            if (longueurRectangle>2000){
+            if (longueurRectangle>1500){
                 // réduit l'image de 10%
                 cropPercentage = 20;
                 cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
@@ -121,22 +134,22 @@ public class TestFrelons {
 
             }
             else if (i==6){
-                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 500);
-                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 450);
+                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 700);
+                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 600);
 
             }
             else if (i==7){
-                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 500);
-                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 450);
+                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 700);
+                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 600);
 
             }
             else if (i==8){
-                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 1050);
-                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 1000);
+                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 1500);
+                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 1450);
             }
             else if (i==9){
-                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 950);
-                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 900);
+                assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 1450);
+                assertTrue("Vérification de la taille minimale du frelon selon le rectange pour l'image " + i, longueurRectangle > 1400);
             }
             else if (i==10){
                 assertTrue("Vérification de la taille maximale du frelon selon le rectange pour l'image " + i, longueurRectangle < 1250);

@@ -6,8 +6,11 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Cette classe permet de déterminer le rectangle englobant des contours
+ */
 public class LengthProcess {
-	//Méthode pour le grand rectangel 
+	//Méthode pour le grand rectangle
     static Rect boundingRectOfAllContours(List<MatOfPoint> contours) {
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
