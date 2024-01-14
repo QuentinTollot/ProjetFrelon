@@ -21,7 +21,7 @@ public class CasteFrelonFemelle {
         Mat image = new Mat(originalImage, cropRect);
 
         TraitementImage traitementImage = new TraitementImage();
-        Rect bigRect = traitementImage.traitementimage(image, originalImage);
+        Rect bigRect = traitementimage(image);
 
         // Récupère la longueur du rectangle correspondant à celle du frelon
         double longueurRectangle = 0;
@@ -31,8 +31,11 @@ public class CasteFrelonFemelle {
         } else {
             longueurRectangle = bigRect.width;
         }
+        RealLenght convertor = new RealLenght(Scale);
+        double realLength = convertor.getRealLenght(longueurRectangle);
 
-        if (longueurRectangle > 2500) {
+        //si le frelon fait plus de 5 cm, on refait le traitement
+        if (realLength > 50) {
             // réduit l'image de 10%
             cropPercentage = 20;
             cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
@@ -40,10 +43,8 @@ public class CasteFrelonFemelle {
             cropRect = new Rect(cropPixels, cropPixels, originalImage.width() - 2 * cropPixels, originalImage.height() - 2 * cropPixels);
             image = new Mat(originalImage, cropRect);
 
-            traitementimage(image, originalImage);
+            traitementimage(image);
         } else {
-            RealLenght convertor = new RealLenght(Scale);
-            double realLength = convertor.getRealLenght(longueurRectangle);
             String caste = CasteDetector.estimerCasteFrelon(realLength);
             return caste;
         }
