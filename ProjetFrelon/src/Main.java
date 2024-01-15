@@ -1,6 +1,10 @@
 import org.opencv.core.Core;
 import results.CasteFrelonFemelle;
 
+/**
+ * Classe main exécutant un exemple
+ */
+
 public class Main {
 
     public static void main(String[] args) {
