@@ -36,8 +36,8 @@ public class CasteFrelonFemelle {
         RealLenght convertor = new RealLenght(Scale);
         double realLength = convertor.getRealLenght(longueurRectangle);
 
-        //si le frelon fait plus de 5 cm, on refait le traitement
-        if (realLength > 50) {
+        //si le frelon fait plus de 4,5 cm, on refait le traitement
+        if (realLength > 45) {
             // réduit l'image de 10%
             cropPercentage = 20;
             cropPixels = (int) (originalImage.width() * cropPercentage / 100.0);
