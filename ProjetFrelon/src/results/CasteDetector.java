@@ -42,7 +42,7 @@ public class CasteDetector {
     }
     //Fonctions qui en fonction de la période de l'année détreminent la caste
     private static String estimerCastePrintemps(double longueur_reelle) {
-        if (longueur_reelle >= 25 && longueur_reelle <= 35) {
+        if (longueur_reelle >= 20 && longueur_reelle <= 32) {
             return "Reine";
         } else if (longueur_reelle >= 14 && longueur_reelle <= 20) {
             return "Ouvrière";
@@ -51,25 +51,25 @@ public class CasteDetector {
     }
 
     private static String estimerCasteEte(double longueur_reelle) {
-        if (longueur_reelle >= 35 && longueur_reelle <= 40) {
+        if (longueur_reelle >= 32 && longueur_reelle <= 40) {
             return "Reine";
-        } else if (longueur_reelle >= 20 && longueur_reelle <= 33) {
+        } else if (longueur_reelle >= 20 && longueur_reelle <= 30) {
             return "Ouvrière";
         }
         return "Non déterminée";
     }
 
     private static String estimerCasteAutomne(double longueur_reelle) {
-        if (longueur_reelle >= 20 && longueur_reelle <= 33) {
+        if (longueur_reelle >= 20 && longueur_reelle <= 30) {
             return "Ouvrière";
-        } else if (longueur_reelle > 33 && longueur_reelle < 43) {
+        } else if (longueur_reelle > 32 && longueur_reelle < 40) {
             return "Reine";
         }
         return "Non déterminée";
     }
 
     private static String estimerCasteHiver(double longueur_reelle) {
-        if (longueur_reelle >= 25 && longueur_reelle <= 40) {
+        if (longueur_reelle >= 20 && longueur_reelle <= 40) {
             return "Reine";
         }
         return "Non déterminée";
