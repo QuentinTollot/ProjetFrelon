@@ -41,13 +41,9 @@ public class TraitementImage {
         Mat colorMask = new Mat();
         Core.bitwise_or(yellowMask, blackMask, colorMask);
 
-        // Appliquer le masque fusionné à l'image originale pour obtenir les régions d'intérêt
-        Mat roiImage = new Mat();
-        image.copyTo(roiImage, colorMask);
-
         // Appliquer la détection des contours sur l'image avec les régions d'intérêt
         Mat edges = new Mat();
-        Imgproc.Canny(roiImage, edges, 50, 150);
+        Imgproc.Canny(colorMask, edges, 50, 150);
 
         // Recherche des contours dans l'image
         List<MatOfPoint> contours = new ArrayList<>();
